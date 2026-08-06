@@ -1,24 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import Login from "@/pages/Login";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Sign In — Buildify AI Blueprint Platform" },
+      {
+        name: "description",
+        content:
+          "Sign in to Buildify to turn furniture blueprints into intelligent manufacturing workflows with AI.",
+      },
+      { property: "og:title", content: "Sign In — Buildify" },
+      {
+        property: "og:description",
+        content: "Access your Buildify workspace for AI blueprint analysis and manufacturing.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Login,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}

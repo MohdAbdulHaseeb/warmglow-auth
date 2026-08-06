@@ -36,7 +36,9 @@ export function useAuthForm<T extends Record<string, string | boolean>>({
         await onSubmit(values);
         setSuccess(true);
       } catch (error) {
-        setErrors({ form: error instanceof Error ? error.message : "Something went wrong" });
+        setErrors({
+          form: error instanceof Error ? error.message : "Something went wrong",
+        } as AuthErrors<T>);
       } finally {
         setLoading(false);
       }

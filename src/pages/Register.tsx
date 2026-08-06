@@ -8,7 +8,7 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { useAuthForm, isEmail } from "@/hooks/useAuthForm";
 
 export default function Register() {
-  const { values, errors, loading, success, setField, handleSubmit } = useAuthForm({
+  const { values, errors, loading, success, setField, handleSubmit } = useAuthForm<{ name: string; email: string; password: string; confirm: string; terms: boolean }>({
     initialValues: { name: "", email: "", password: "", confirm: "", terms: false },
     validate: (v) => ({
       name: !v.name ? "Full name is required" : undefined,

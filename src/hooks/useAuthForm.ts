@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-export type AuthErrors<T> = Partial<Record<keyof T | "form", string>>;
+export type AuthErrors<T> = Partial<Record<keyof T | "form", string | undefined>>;
 
 interface UseAuthFormOptions<T> {
   initialValues: T;

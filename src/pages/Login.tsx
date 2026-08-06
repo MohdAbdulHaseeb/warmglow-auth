@@ -8,7 +8,7 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { useAuthForm, isEmail } from "@/hooks/useAuthForm";
 
 export default function Login() {
-  const { values, errors, loading, success, setField, handleSubmit } = useAuthForm({
+  const { values, errors, loading, success, setField, handleSubmit } = useAuthForm<{ email: string; password: string; remember: boolean }>({
     initialValues: { email: "", password: "", remember: false },
     validate: (v) => ({
       email: !v.email ? "Email is required" : !isEmail(v.email) ? "Enter a valid email" : undefined,

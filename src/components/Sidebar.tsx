@@ -28,8 +28,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 pb-4">
-        {navItems.map((item) => {
-          const active = pathname === item.to;
+        {navItems.map((item, idx) => {
+          const active =
+            pathname === item.to && navItems.findIndex((n) => n.to === item.to) === idx;
           return (
             <Link
               key={item.label}

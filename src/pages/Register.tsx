@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Mail, User } from "lucide-react";
 import { AuthCard } from "@/components/AuthCard";
 import { AuthInput } from "@/components/AuthInput";
@@ -8,6 +8,7 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { useAuthForm, isEmail } from "@/hooks/useAuthForm";
 
 export default function Register() {
+  const navigate = useNavigate();
   const { values, errors, loading, success, setField, handleSubmit } = useAuthForm<{ name: string; email: string; password: string; confirm: string; terms: boolean }>({
     initialValues: { name: "", email: "", password: "", confirm: "", terms: false },
     validate: (v) => ({
@@ -21,6 +22,7 @@ export default function Register() {
     // Placeholder — connect Lovable Cloud auth here later.
     onSubmit: async () => {
       await new Promise((resolve) => setTimeout(resolve, 900));
+      navigate({ to: "/dashboard" });
     },
   });
 

@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { Bell, Menu, Moon, Search, Sparkles, ChevronDown, User, Settings, LogOut } from "lucide-react";
+import { Bell, Search, ChevronDown, User, Settings, LogOut } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { notifications } from "@/lib/dashboard-data";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
-interface NavbarProps {
-  onMenu: () => void;
-}
-
-export function Navbar({ onMenu }: NavbarProps) {
+export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const unread = notifications.filter((n) => n.unread).length;
 
@@ -17,14 +14,6 @@ export function Navbar({ onMenu }: NavbarProps) {
     <header className="glass-panel sticky top-0 z-30 rounded-none border-x-0 border-t-0 px-4 py-3 sm:px-6">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
         <div className="flex min-w-0 items-center gap-3">
-          <button
-            type="button"
-            onClick={onMenu}
-            aria-label="Toggle sidebar"
-            className="rounded-xl p-2 text-secondary-foreground transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Menu size={18} />
-          </button>
           <img src={logo} alt="Buildify" className="size-8 shrink-0 lg:hidden" />
           <label className="relative hidden min-w-0 flex-1 items-center sm:flex">
             <Search size={16} className="absolute left-3 text-muted-foreground" aria-hidden />
@@ -38,19 +27,8 @@ export function Navbar({ onMenu }: NavbarProps) {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <button
-            type="button"
-            className="ember-gradient hidden items-center gap-2 rounded-2xl px-3.5 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
-          >
-            <Sparkles size={16} aria-hidden /> AI Assistant
-          </button>
-          <button
-            type="button"
-            aria-label="Toggle theme"
-            className="rounded-xl p-2 text-secondary-foreground transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Moon size={18} />
-          </button>
+          <ThemeToggle />
+
           <button
             type="button"
             aria-label={`Notifications, ${unread} unread`}

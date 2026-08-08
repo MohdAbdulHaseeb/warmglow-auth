@@ -3,7 +3,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { StatsCard } from "@/components/StatsCard";
 import { SectionCard } from "@/components/SectionCard";
-import { ProjectTable } from "@/components/ProjectTable";
+import { RecentProjectsSection } from "@/components/RecentProjectsSection";
 import { UploadBlueprint } from "@/components/UploadBlueprint";
 import { MaterialCards } from "@/components/MaterialCards";
 import { RoomVisualization } from "@/components/RoomVisualization";
@@ -38,9 +38,8 @@ export default function Dashboard() {
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="space-y-6">
-            <SectionCard title="Recent Projects" description="Latest furniture builds across your studio">
-              <ProjectTable />
-            </SectionCard>
+            <RecentProjectsSection />
+
 
             <SectionCard title="AI Blueprint Analysis" description="Upload a blueprint and let Buildify do the takeoff">
               <UploadBlueprint />

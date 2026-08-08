@@ -14,7 +14,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       <div className="relative flex">
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
         <div className="flex min-w-0 flex-1 flex-col">
-          <Navbar onMenu={() => setCollapsed((v) => !v)} />
+          <Navbar />
           <motion.main
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}

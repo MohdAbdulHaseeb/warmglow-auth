@@ -12,7 +12,6 @@ export function applyTheme(mode: ThemeMode) {
   if (typeof document === "undefined") return;
   const dark = mode === "dark" || (mode === "system" && systemPrefersDark());
   document.documentElement.classList.toggle("dark", dark);
-  document.documentElement.style.colorScheme = dark ? "dark" : "light";
 }
 
 /** Theme mode with localStorage persistence and OS-preference support. */

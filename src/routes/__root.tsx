@@ -112,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-const themeScript = `(function(){try{var m=localStorage.getItem('buildify-theme')||'dark';var d=m==='dark'||(m==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var e=document.documentElement;e.classList.toggle('dark',d);e.style.colorScheme=d?'dark':'light';}catch(e){document.documentElement.classList.add('dark');}})();`;
+const themeScript = `(function(){try{var m=localStorage.getItem('buildify-theme')||'dark';var d=m==='dark'||(m==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);}catch(e){document.documentElement.classList.add('dark');}})();`;
 
 function RootShell({ children }: { children: ReactNode }) {
   return (

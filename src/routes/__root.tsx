@@ -116,7 +116,7 @@ const themeScript = `(function(){try{var m=localStorage.getItem('buildify-theme'
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

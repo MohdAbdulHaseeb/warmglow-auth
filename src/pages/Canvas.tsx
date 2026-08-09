@@ -93,7 +93,7 @@ export default function Canvas() {
           nextDisabled={nextDisabled}
           nextLabel={step === 4 ? "Generate Bill" : "Next"}
           isFinal={step === 4}
-          hint={hints[step - 1]}
+          hint={hints[step - 1] ?? ""}
         />
       </div>
     </DashboardLayout>

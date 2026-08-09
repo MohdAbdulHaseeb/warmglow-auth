@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as BlueprintsRouteImport } from './routes/blueprints'
+import { Route as CanvasRouteImport } from './routes/canvas'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
@@ -33,6 +34,11 @@ const AnalyticsRoute = AnalyticsRouteImport.update({
 const BlueprintsRoute = BlueprintsRouteImport.update({
   id: '/blueprints',
   path: '/blueprints',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanvasRoute = CanvasRouteImport.update({
+  id: '/canvas',
+  path: '/canvas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/blueprints': typeof BlueprintsRoute
+  '/canvas': typeof CanvasRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/blueprints': typeof BlueprintsRoute
+  '/canvas': typeof CanvasRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/blueprints': typeof BlueprintsRoute
+  '/canvas': typeof CanvasRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analytics'
     | '/blueprints'
+    | '/canvas'
     | '/dashboard'
     | '/forgot-password'
     | '/login'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analytics'
     | '/blueprints'
+    | '/canvas'
     | '/dashboard'
     | '/forgot-password'
     | '/login'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analytics'
     | '/blueprints'
+    | '/canvas'
     | '/dashboard'
     | '/forgot-password'
     | '/login'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
   BlueprintsRoute: typeof BlueprintsRoute
+  CanvasRoute: typeof CanvasRoute
   DashboardRoute: typeof DashboardRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/blueprints'
       fullPath: '/blueprints'
       preLoaderRoute: typeof BlueprintsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canvas': {
+      id: '/canvas'
+      path: '/canvas'
+      fullPath: '/canvas'
+      preLoaderRoute: typeof CanvasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
   BlueprintsRoute: BlueprintsRoute,
+  CanvasRoute: CanvasRoute,
   DashboardRoute: DashboardRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,

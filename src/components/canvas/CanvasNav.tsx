@@ -38,8 +38,9 @@ export function CanvasNav({
             type="button"
             whileHover={nextDisabled ? {} : { scale: 1.02 }}
             whileTap={nextDisabled ? {} : { scale: 0.98 }}
-
+            onClick={onNext}
             disabled={nextDisabled}
+
             className="ember-gradient ember-glow inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {isFinal ? <ReceiptText size={15} aria-hidden /> : null}

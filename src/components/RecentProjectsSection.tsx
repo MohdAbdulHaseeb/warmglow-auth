@@ -23,7 +23,7 @@ export function RecentProjectsSection() {
       <div className="flex">
         <motion.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
           <Link
-            to="/projects/new"
+            to="/canvas"
             className="ember-gradient ember-glow inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Plus size={16} aria-hidden />

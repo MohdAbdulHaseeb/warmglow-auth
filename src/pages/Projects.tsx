@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Search, X, SearchX, ChevronRight, Filter } from "lucide-react";
@@ -14,7 +14,7 @@ import {
   type PaymentStatus,
   type ProjectStage,
 } from "@/lib/projects-data";
-import { usePaymentOverrides } from "@/lib/payment-store";
+import { hydratePayments, usePaymentOverrides } from "@/lib/payment-store";
 
 function Badge({ label, className }: { label: string; className: string }) {
   return (
@@ -46,6 +46,9 @@ const selectClass =
 
 export default function Projects() {
   const overrides = usePaymentOverrides();
+  useEffect(() => {
+    hydratePayments();
+  }, []);
   const [query, setQuery] = useState("");
   const [stage, setStage] = useState<ProjectStage | "all">("all");
   const [payment, setPayment] = useState<PaymentStatus | "all">("all");

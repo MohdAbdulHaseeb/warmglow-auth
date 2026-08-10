@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Search, X, SearchX, ChevronRight, Filter } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { SectionCard } from "@/components/SectionCard";
@@ -45,6 +45,7 @@ const selectClass =
   "rounded-2xl border border-border bg-input/40 px-3 py-2 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 export default function Projects() {
+  const navigate = useNavigate();
   const overrides = usePaymentOverrides();
   useEffect(() => {
     hydratePayments();
@@ -205,13 +206,14 @@ export default function Projects() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.2) }}
-                        className="group border-t border-border transition-colors hover:bg-accent/[0.06]"
+                        onClick={() => navigate({ to: "/projects/$projectId", params: { projectId: p.id } })}
+                        className="group cursor-pointer border-t border-border transition-colors hover:bg-accent/[0.06]"
                       >
                         <td className="px-3 py-3 font-medium">
                           <Link
                             to="/projects/$projectId"
                             params={{ projectId: p.id }}
-                            className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:text-accent"
+                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:text-accent"
                           >
                             {p.name}
                           </Link>

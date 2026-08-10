@@ -19,7 +19,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as BillCreateRouteImport } from './routes/bill.create'
+import { Route as CanvasProjectIdRouteImport } from './routes/canvas.$projectId'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 import { Route as ProjectsNewRouteImport } from './routes/projects.new'
 
 const IndexRoute = IndexRouteImport.update({
@@ -72,9 +74,19 @@ const BillCreateRoute = BillCreateRouteImport.update({
   path: '/bill/create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CanvasProjectIdRoute = CanvasProjectIdRouteImport.update({
+  id: '/$projectId',
+  path: '/$projectId',
+  getParentRoute: () => CanvasRoute,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsProjectIdRoute = ProjectsProjectIdRouteImport.update({
+  id: '/projects/$projectId',
+  path: '/projects/$projectId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsNewRoute = ProjectsNewRouteImport.update({
@@ -87,13 +99,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/blueprints': typeof BlueprintsRoute
-  '/canvas': typeof CanvasRoute
+  '/canvas': typeof CanvasRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
   '/bill/create': typeof BillCreateRoute
+  '/canvas/$projectId': typeof CanvasProjectIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/new': typeof ProjectsNewRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -101,13 +115,15 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/blueprints': typeof BlueprintsRoute
-  '/canvas': typeof CanvasRoute
+  '/canvas': typeof CanvasRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
   '/bill/create': typeof BillCreateRoute
+  '/canvas/$projectId': typeof CanvasProjectIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/new': typeof ProjectsNewRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -116,13 +132,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/blueprints': typeof BlueprintsRoute
-  '/canvas': typeof CanvasRoute
+  '/canvas': typeof CanvasRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
   '/bill/create': typeof BillCreateRoute
+  '/canvas/$projectId': typeof CanvasProjectIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/new': typeof ProjectsNewRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -139,6 +157,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/settings'
     | '/bill/create'
+    | '/canvas/$projectId'
+    | '/projects/$projectId'
     | '/projects/new'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +173,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/settings'
     | '/bill/create'
+    | '/canvas/$projectId'
+    | '/projects/$projectId'
     | '/projects/new'
     | '/projects'
   id:
@@ -167,6 +189,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/settings'
     | '/bill/create'
+    | '/canvas/$projectId'
+    | '/projects/$projectId'
     | '/projects/new'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -175,13 +199,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
   BlueprintsRoute: typeof BlueprintsRoute
-  CanvasRoute: typeof CanvasRoute
+  CanvasRoute: typeof CanvasRouteWithChildren
   DashboardRoute: typeof DashboardRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   SettingsRoute: typeof SettingsRoute
   BillCreateRoute: typeof BillCreateRoute
+  ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsNewRoute: typeof ProjectsNewRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -258,11 +283,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BillCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/canvas/$projectId': {
+      id: '/canvas/$projectId'
+      path: '/$projectId'
+      fullPath: '/canvas/$projectId'
+      preLoaderRoute: typeof CanvasProjectIdRouteImport
+      parentRoute: typeof CanvasRoute
+    }
     '/projects/': {
       id: '/projects/'
       path: '/projects'
       fullPath: '/projects/'
       preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/$projectId': {
+      id: '/projects/$projectId'
+      path: '/projects/$projectId'
+      fullPath: '/projects/$projectId'
+      preLoaderRoute: typeof ProjectsProjectIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/new': {
@@ -275,17 +314,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface CanvasRouteChildren {
+  CanvasProjectIdRoute: typeof CanvasProjectIdRoute
+}
+
+const CanvasRouteChildren: CanvasRouteChildren = {
+  CanvasProjectIdRoute: CanvasProjectIdRoute,
+}
+
+const CanvasRouteWithChildren =
+  CanvasRoute._addFileChildren(CanvasRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
   BlueprintsRoute: BlueprintsRoute,
-  CanvasRoute: CanvasRoute,
+  CanvasRoute: CanvasRouteWithChildren,
   DashboardRoute: DashboardRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   SettingsRoute: SettingsRoute,
   BillCreateRoute: BillCreateRoute,
+  ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsNewRoute: ProjectsNewRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }

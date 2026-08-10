@@ -92,6 +92,7 @@ export default function ProjectDetail() {
   const total = project.bill?.total ?? 0;
   const remaining = Math.max(0, total - payment.paid);
   const currentStep = stageProgressIndex(project.stage);
+  const allDone = project.completion >= 100;
   const docs = projectDocuments(project).filter((d) => d.available);
 
   const share = async () => {
@@ -202,8 +203,8 @@ export default function ProjectDetail() {
         <SectionCard title="Project Progress" description="Manufacturing pipeline">
           <ol className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {progressStages.map((label, i) => {
-              const done = i < currentStep;
-              const current = i === currentStep;
+              const done = allDone || i < currentStep;
+              const current = !allDone && i === currentStep;
               return (
                 <motion.li
                   key={label}

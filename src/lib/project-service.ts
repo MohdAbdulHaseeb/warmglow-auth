@@ -48,6 +48,7 @@ const CHAIR_ANALYSIS: BlueprintAnalysis = {
   furniture: "Chair",
   structure: "Four-leg frame with a floating seat pan, sculpted backrest and bolt-through armrests.",
   confidence: 94,
+  cost: 4800,
   parts: [
     { id: "seat", label: "Seat", note: "Primary contact surface · 480 × 460 mm" },
     { id: "backrest", label: "Backrest", note: "Curved lumbar panel · 420 × 380 mm" },
@@ -71,6 +72,7 @@ const TABLE_ANALYSIS: BlueprintAnalysis = {
   furniture: "Table",
   structure: "Rectangular top on an apron frame with four corner legs and a lower stretcher.",
   confidence: 91,
+  cost: 9600,
   parts: [
     { id: "top", label: "Table Top", note: "1600 × 900 mm surface" },
     { id: "apron", label: "Apron Frame", note: "Perimeter support rail" },
@@ -87,6 +89,7 @@ const CABINET_ANALYSIS: BlueprintAnalysis = {
   furniture: "Cabinet",
   structure: "Carcass box with two hinged doors, three internal shelves and a plinth base.",
   confidence: 89,
+  cost: 14200,
   parts: [
     { id: "carcass", label: "Carcass", note: "Main box · 1800 × 900 mm" },
     { id: "door-l", label: "Left Door", note: "Hinged panel" },
@@ -121,6 +124,61 @@ export async function analyzeBlueprint(
   if (n.includes("table") || n.includes("desk")) return TABLE_ANALYSIS;
   if (n.includes("cabinet") || n.includes("wardrobe") || n.includes("shelf")) return CABINET_ANALYSIS;
   return CHAIR_ANALYSIS;
+}
+
+/**
+ * Mock AI re-analysis. Combines the original analysis with the assigned
+ * materials and the optionally selected design to produce updated values
+ * that OVERWRITE the initial analysis result.
+ */
+export async function reanalyzeBlueprint(
+  base: BlueprintAnalysis,
+  assignments: MaterialAssignment[],
+  selectedDesignName?: string,
+  onProgress?: (p: number) => void,
+): Promise<BlueprintAnalysis> {
+  const total = 2000;
+  const started = Date.now();
+  await new Promise<void>((resolve) => {
+    const id = setInterval(() => {
+      const pct = Math.min(100, Math.round(((Date.now() - started) / total) * 100));
+      onProgress?.(pct);
+      if (pct >= 100) {
+        clearInterval(id);
+        resolve();
+      }
+    }, 80);
+  });
+
+  const materials = assignments
+    .map((a) => ({ part: a.partId, material: getMaterial(a.materialId) }))
+    .filter((m) => m.material);
+
+  const cost = Math.round(
+    materials.reduce((sum, m) => sum + (m.material?.price ?? 0) * 0.45, 0) || base.cost,
+  );
+
+  const grouped = new Map<string, number>();
+  materials.forEach((m) => grouped.set(m.material!.name, (grouped.get(m.material!.name) ?? 0) + 1));
+  const summary = [...grouped.entries()].map(([name, n]) => `${name}×${n}`).join(", ");
+
+  const coverage = base.parts.length ? materials.length / base.parts.length : 0;
+  const confidence = Math.min(99, Math.round(base.confidence + coverage * 5 + (selectedDesignName ? 1 : 0)));
+
+  return {
+    ...base,
+    confidence,
+    cost,
+    furniture: summary ? `${base.furniture} with ${summary}` : base.furniture,
+    structure: selectedDesignName
+      ? `${base.structure} Adapted to the ${selectedDesignName} design direction.`
+      : base.structure,
+    characteristics: [
+      ...base.characteristics,
+      ...(summary ? [`Material set: ${summary}`] : []),
+      ...(selectedDesignName ? [`Design: ${selectedDesignName}`] : []),
+    ],
+  };
 }
 
 /** Mock 2D material preview generation. */

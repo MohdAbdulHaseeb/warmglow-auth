@@ -1,14 +1,36 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Loader2, Sparkles, Check } from "lucide-react";
+import { Loader2, Sparkles, Check, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { generateDesignSuggestions } from "@/lib/project-service";
+import { formatCurrency, generateDesignSuggestions, reanalyzeBlueprint } from "@/lib/project-service";
+import { getMaterial } from "@/lib/catalog";
 import { patchProject, useProject } from "@/lib/project-store";
 
 /** Module 3 — Optional AI design suggestion gallery. */
 export function ModuleSuggestions() {
   const project = useProject();
   const [loading, setLoading] = useState(false);
+  const [reanalyzing, setReanalyzing] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const parts = project.analysis?.parts ?? [];
+  const selectedDesign = project.suggestions.find((s) => s.id === project.selectedDesignId);
+
+  const rerun = async () => {
+    const base = project.initialAnalysis ?? project.analysis;
+    if (!base) return;
+    setReanalyzing(true);
+    setProgress(0);
+    try {
+      const updated = await reanalyzeBlueprint(base, project.assignments, selectedDesign?.name, setProgress);
+      patchProject({ analysis: updated, analysisUpdated: true, materialPreviewReady: true });
+      toast.success("Analysis updated with your materials");
+    } catch {
+      toast.error("Re-analysis failed. Please try again.");
+    } finally {
+      setReanalyzing(false);
+    }
+  };
 
   const run = async () => {
     if (!project.analysis) return;
@@ -102,6 +124,72 @@ export function ModuleSuggestions() {
           </AnimatePresence>
         </div>
       )}
+
+      {/* AI re-analysis + updated 2D preview */}
+      <div className="rounded-[18px] border border-border bg-foreground/[0.03] p-5">
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold">AI Re-analysis</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Re-runs the analysis using your blueprint, assigned materials and selected design. The updated results
+              replace the initial analysis.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => void rerun()}
+            disabled={reanalyzing || !project.analysis}
+            className="ember-gradient ember-glow inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {reanalyzing ? <Loader2 size={15} className="animate-spin" aria-hidden /> : <RefreshCw size={15} aria-hidden />}
+            {reanalyzing ? "Re-analyzing Blueprint…" : "Run AI Re-analysis"}
+          </button>
+        </div>
+
+        {reanalyzing && (
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-foreground/10">
+            <motion.div className="ember-gradient h-full rounded-full" animate={{ width: `${progress}%` }} />
+          </div>
+        )}
+
+        {project.analysisUpdated && project.analysis && !reanalyzing && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 grid gap-4 lg:grid-cols-2">
+            <div className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Updated Analysis</p>
+              <p className="mt-2 text-sm">
+                Confidence <span className="font-semibold text-success">{project.analysis.confidence}%</span>
+              </p>
+              <p className="mt-1 text-sm text-secondary-foreground">{project.analysis.furniture}</p>
+              <p className="mt-2 text-sm">
+                Material Cost{" "}
+                <span className="font-semibold text-accent">{formatCurrency(project.analysis.cost)}</span>
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border bg-background/40 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Updated 2D Preview</p>
+              {project.assignments.length === 0 ? (
+                <p className="mt-3 text-xs text-muted-foreground">No materials assigned.</p>
+              ) : (
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {project.assignments.map((a) => {
+                    const material = getMaterial(a.materialId);
+                    const part = parts.find((p) => p.id === a.partId);
+                    return (
+                      <div key={a.partId} className="overflow-hidden rounded-xl border border-border">
+                        <div className="h-12 w-full" style={{ background: material?.swatch }} aria-hidden />
+                        <div className="p-2">
+                          <p className="truncate text-[11px] font-medium">{part?.label}</p>
+                          <p className="truncate text-[11px] text-muted-foreground">{material?.name}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Sparkles, Loader2, ScanLine, Layers3, CircleCheck } from "lucide-react";
 import { toast } from "sonner";
 import { FileDropzone } from "@/components/canvas/FileDropzone";
-import { analyzeBlueprint } from "@/lib/project-service";
+import { analyzeBlueprint, formatCurrency } from "@/lib/project-service";
 import { patchProject, useProject } from "@/lib/project-store";
 
 /** Module 1 — Blueprint upload and (mock) AI analysis. */
@@ -18,7 +18,15 @@ export function ModuleBlueprint() {
     setProgress(0);
     try {
       const analysis = await analyzeBlueprint(project.blueprint, setProgress);
-      patchProject({ analysis, assignments: [], materialPreviewReady: false, suggestions: [] });
+      patchProject({
+        analysis,
+        initialAnalysis: analysis,
+        analysisUpdated: false,
+        assignments: [],
+        materialPreviewReady: false,
+        suggestions: [],
+      });
+
       toast.success(`Analysis complete · ${analysis.parts.length} parts detected`);
     } catch {
       toast.error("AI analysis failed. Please try again.");
@@ -82,15 +90,33 @@ export function ModuleBlueprint() {
             className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
           >
             <div className="rounded-[18px] border border-border bg-foreground/[0.03] p-5">
-              <div className="flex items-center gap-2 text-accent">
+              <div className="flex flex-wrap items-center gap-2 text-accent">
                 <ScanLine size={16} aria-hidden />
                 <h3 className="text-sm font-semibold">Analysis Result</h3>
-                <span className="ml-auto rounded-full bg-success/15 px-2.5 py-1 text-xs text-success">
-                  {project.analysis.confidence}% confidence
-                </span>
+                {project.analysisUpdated && (
+                  <span className="rounded-full bg-accent/15 px-2.5 py-1 text-xs text-accent">Analysis Updated</span>
+                )}
               </div>
-              <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">Furniture</p>
+
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="uppercase tracking-wide text-muted-foreground">AI Confidence</span>
+                  <span className="font-semibold text-success">{project.analysis.confidence}%</span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-foreground/10">
+                  <motion.div
+                    className="ember-gradient h-full rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${project.analysis.confidence}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
+
+              <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">Detected Items</p>
               <p className="text-xl font-semibold">{project.analysis.furniture}</p>
+              <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">Estimated Material Cost</p>
+              <p className="text-xl font-semibold text-accent">{formatCurrency(project.analysis.cost)}</p>
               <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">Design structure</p>
               <p className="mt-1 text-sm text-secondary-foreground">{project.analysis.structure}</p>
               <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">Characteristics</p>
@@ -102,6 +128,7 @@ export function ModuleBlueprint() {
                 ))}
               </ul>
             </div>
+
 
             <div className="rounded-[18px] border border-border bg-foreground/[0.03] p-5">
               <div className="flex items-center gap-2 text-accent">

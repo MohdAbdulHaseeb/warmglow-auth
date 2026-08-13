@@ -90,13 +90,18 @@ export interface ProjectState {
   projectName: string;
   createdAt: string;
   blueprint: BlueprintFile | null;
+  /** The current (latest) analysis — re-analysis overwrites this. */
   analysis: BlueprintAnalysis | null;
+  /** Kept for history/audit only; the UI always shows `analysis`. */
+  initialAnalysis: BlueprintAnalysis | null;
+  analysisUpdated: boolean;
   assignments: MaterialAssignment[];
   materialPreviewReady: boolean;
   suggestions: DesignSuggestion[];
   selectedDesignId: string | null;
   roomImages: Partial<Record<RoomSide, BlueprintFile>>;
   roomGenerated: boolean;
+  roomStatus: RoomStatus;
   bill: BillState;
 }
 
@@ -109,12 +114,15 @@ export function createEmptyProject(name = "Untitled Project"): ProjectState {
     createdAt: new Date().toISOString(),
     blueprint: null,
     analysis: null,
+    initialAnalysis: null,
+    analysisUpdated: false,
     assignments: [],
     materialPreviewReady: false,
     suggestions: [],
     selectedDesignId: null,
     roomImages: {},
     roomGenerated: false,
+    roomStatus: "not-started",
     bill: {
       id: null,
       company: {

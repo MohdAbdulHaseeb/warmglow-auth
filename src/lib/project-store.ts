@@ -23,7 +23,12 @@ export interface BlueprintAnalysis {
   parts: { id: string; label: string; note: string }[];
   characteristics: string[];
   confidence: number;
+  /** Estimated material cost in INR for the detected parts. */
+  cost: number;
 }
+
+export type RoomStatus = "not-started" | "generating" | "generated" | "skipped";
+
 
 export interface MaterialAssignment {
   partId: string;

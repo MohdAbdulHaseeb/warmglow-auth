@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Sparkles, Loader2, ScanLine, Layers3, CircleCheck } from "lucide-react";
 import { toast } from "sonner";
 import { FileDropzone } from "@/components/canvas/FileDropzone";
-import { analyzeBlueprint } from "@/lib/project-service";
+import { analyzeBlueprint, formatCurrency } from "@/lib/project-service";
 import { patchProject, useProject } from "@/lib/project-store";
 
 /** Module 1 — Blueprint upload and (mock) AI analysis. */

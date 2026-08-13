@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { Bell, Search, ChevronDown, User, Settings, LogOut } from "lucide-react";
+import { Bell, ChevronDown, User, Settings, LogOut } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { notifications } from "@/lib/dashboard-data";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -13,18 +13,13 @@ export function Navbar() {
   return (
     <header className="glass-panel sticky top-0 z-30 rounded-none border-x-0 border-t-0 px-4 py-3 sm:px-6">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
-        <div className="flex min-w-0 items-center gap-3">
-          <img src={logo} alt="Buildify" className="size-8 shrink-0 lg:hidden" />
-          <label className="relative hidden min-w-0 flex-1 items-center sm:flex">
-            <Search size={16} className="absolute left-3 text-muted-foreground" aria-hidden />
-            <span className="sr-only">Global search</span>
-            <input
-              type="search"
-              placeholder="Search projects, blueprints, materials…"
-              className="w-full min-w-0 rounded-2xl border border-border bg-input/40 py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-72 lg:w-96"
-            />
-          </label>
-        </div>
+        <Link to="/dashboard" className="flex min-w-0 items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl">
+          <img src={logo} alt="" aria-hidden className="size-8 shrink-0" />
+          <span className="truncate text-lg font-semibold uppercase tracking-[0.18em] text-foreground">
+            Buildify
+          </span>
+        </Link>
+
 
         <div className="flex shrink-0 items-center gap-1.5">
           <ThemeToggle />

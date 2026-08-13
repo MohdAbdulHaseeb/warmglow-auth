@@ -18,7 +18,15 @@ export function ModuleBlueprint() {
     setProgress(0);
     try {
       const analysis = await analyzeBlueprint(project.blueprint, setProgress);
-      patchProject({ analysis, assignments: [], materialPreviewReady: false, suggestions: [] });
+      patchProject({
+        analysis,
+        initialAnalysis: analysis,
+        analysisUpdated: false,
+        assignments: [],
+        materialPreviewReady: false,
+        suggestions: [],
+      });
+
       toast.success(`Analysis complete · ${analysis.parts.length} parts detected`);
     } catch {
       toast.error("AI analysis failed. Please try again.");

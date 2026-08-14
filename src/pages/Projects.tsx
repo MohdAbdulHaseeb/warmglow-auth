@@ -15,6 +15,7 @@ import {
   type ProjectStage,
 } from "@/lib/projects-data";
 import { hydratePayments, usePaymentOverrides } from "@/lib/payment-store";
+import { FilterSelect } from "@/components/projects/FilterSelect";
 
 function Badge({ label, className }: { label: string; className: string }) {
   return (
@@ -132,27 +133,27 @@ export default function Projects() {
             <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
               <Filter size={14} aria-hidden /> Filters
             </span>
-            <label className="sr-only" htmlFor="f-stage">Project status</label>
-            <select id="f-stage" className={selectClass} value={stage} onChange={(e) => setStage(e.target.value as ProjectStage | "all")}>
-              <option value="all">All Status</option>
-              {projectStages.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-            <label className="sr-only" htmlFor="f-pay">Payment status</label>
-            <select id="f-pay" className={selectClass} value={payment} onChange={(e) => setPayment(e.target.value as PaymentStatus | "all")}>
-              <option value="all">All Payments</option>
-              {paymentStatuses.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-            <label className="sr-only" htmlFor="f-worker">Assigned worker</label>
-            <select id="f-worker" className={selectClass} value={workerId} onChange={(e) => setWorkerId(e.target.value)}>
-              <option value="all">All Workers</option>
-              {workers.map((w) => (
-                <option key={w.id} value={w.id}>{w.name}</option>
-              ))}
-            </select>
+            <FilterSelect
+              label="Project status"
+              className="w-44"
+              value={stage}
+              onChange={(v) => setStage(v as ProjectStage | "all")}
+              options={[{ value: "all", label: "All Status" }, ...projectStages.map((s) => ({ value: s, label: s }))]}
+            />
+            <FilterSelect
+              label="Payment status"
+              className="w-40"
+              value={payment}
+              onChange={(v) => setPayment(v as PaymentStatus | "all")}
+              options={[{ value: "all", label: "All Payments" }, ...paymentStatuses.map((s) => ({ value: s, label: s }))]}
+            />
+            <FilterSelect
+              label="Assigned worker"
+              className="w-40"
+              value={workerId}
+              onChange={setWorkerId}
+              options={[{ value: "all", label: "All Workers" }, ...workers.map((w) => ({ value: w.id, label: w.name }))]}
+            />
             <label className="sr-only" htmlFor="f-date">Date</label>
             <input
               id="f-date"

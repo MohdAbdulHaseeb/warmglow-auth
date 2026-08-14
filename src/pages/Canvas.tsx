@@ -10,7 +10,7 @@ import { ModuleBlueprint } from "@/components/canvas/ModuleBlueprint";
 import { ModuleMaterials } from "@/components/canvas/ModuleMaterials";
 import { ModuleSuggestions } from "@/components/canvas/ModuleSuggestions";
 import { ModuleRoom } from "@/components/canvas/ModuleRoom";
-import { hydrateProject, useProject } from "@/lib/project-store";
+import { hydrateProject, patchProject, useProject } from "@/lib/project-store";
 
 const moduleMeta = [
   { title: "Blueprint Upload & AI Analysis", description: "Upload a furniture blueprint and let Buildify detect its parts" },
@@ -23,6 +23,7 @@ export default function Canvas() {
   const navigate = useNavigate();
   const project = useProject();
   const [step, setStep] = useState(1);
+  const [confirmSkip, setConfirmSkip] = useState(false);
 
   useEffect(() => {
     hydrateProject();
@@ -35,23 +36,31 @@ export default function Canvas() {
   if (project.roomGenerated) completed.push(4);
 
   const nextDisabled =
-    (step === 1 && !project.analysis) ||
-    (step === 2 && !project.materialPreviewReady) ||
-    (step === 4 && !project.roomGenerated);
+    (step === 1 && !project.analysis) || (step === 2 && !project.materialPreviewReady);
 
   const hints = [
     project.analysis ? "Analysis complete — continue to materials." : "Analyze the blueprint to continue.",
     project.materialPreviewReady ? "Materials confirmed — continue." : "Assign materials and confirm to continue.",
     "Selecting a suggestion is optional.",
-    project.roomGenerated ? "Ready to generate the bill." : "Generate the 3D room to unlock billing.",
+    project.roomGenerated
+      ? "3D visualization generated — continue to billing."
+      : "The 3D visualization is optional — you can continue to billing.",
   ];
 
   const meta = moduleMeta[step - 1]!;
 
+  const goToBill = () => {
+    toast.success("Bill draft created from your Canvas project");
+    void navigate({ to: "/bill/create" });
+  };
+
   const goNext = () => {
     if (step === 4) {
-      toast.success("Bill draft created from your Canvas project");
-      void navigate({ to: "/bill/create" });
+      if (project.roomGenerated) {
+        goToBill();
+      } else {
+        setConfirmSkip(true);
+      }
       return;
     }
     setStep((s) => Math.min(4, s + 1));
@@ -84,6 +93,54 @@ export default function Canvas() {
               {step === 4 && <ModuleRoom />}
             </SectionCard>
           </motion.div>
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {confirmSkip && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 grid place-items-center bg-background/70 p-4 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="skip-3d-title"
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 12 }}
+                animate={{ scale: 1, y: 0 }}
+                className="glass-panel w-full max-w-md rounded-[18px] p-6"
+              >
+                <h3 id="skip-3d-title" className="text-base font-semibold">
+                  Continue without a 3D visualization?
+                </h3>
+                <p className="mt-2 text-sm text-secondary-foreground">
+                  You haven&apos;t generated a 3D visualization yet. Do you want to continue to Generate Bill without
+                  it?
+                </p>
+                <div className="mt-5 flex flex-wrap justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmSkip(false)}
+                    className="rounded-2xl border border-border px-4 py-2 text-sm text-secondary-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Go Back
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      patchProject({ roomStatus: "skipped" });
+                      setConfirmSkip(false);
+                      goToBill();
+                    }}
+                    className="ember-gradient rounded-2xl px-4 py-2 text-sm font-medium text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Yes, Continue
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
         </AnimatePresence>
 
         <CanvasNav

@@ -28,11 +28,13 @@ export function ModuleRoom() {
       toast.error("Upload all four room views before generating.");
       return;
     }
+    patchProject({ roomStatus: "generating" });
     try {
       const ok = await generateRoomVisualization(setStage);
-      patchProject({ roomGenerated: ok });
+      patchProject({ roomGenerated: ok, roomStatus: ok ? "generated" : "not-started" });
       toast.success("3D room visualization ready");
     } catch {
+      patchProject({ roomStatus: "not-started" });
       toast.error("Room generation failed. Please try again.");
     } finally {
       setStage(null);
@@ -43,9 +45,26 @@ export function ModuleRoom() {
 
   return (
     <div className="space-y-6">
-      <p className="rounded-[18px] border border-border bg-foreground/[0.03] p-4 text-sm text-secondary-foreground">
-        Upload photos of your room from all four sides so the furniture can be placed in context.
-      </p>
+      <div className="rounded-[18px] border border-border bg-foreground/[0.03] p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm text-secondary-foreground">
+            Optional step — upload photos of your room from all four sides so the furniture can be placed in context.
+            You can skip straight to Generate Bill.
+          </p>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          3D Visualization Status:{" "}
+          <span className="text-accent">
+            {project.roomStatus === "generated"
+              ? "Generated"
+              : project.roomStatus === "generating"
+                ? "Generating"
+                : project.roomStatus === "skipped"
+                  ? "Skipped"
+                  : "Not Started"}
+          </span>
+        </p>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {sides.map((side) => (

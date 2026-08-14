@@ -1,7 +1,5 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { AnalyticsCharts } from "@/components/AnalyticsCharts";
-import { SectionCard } from "@/components/SectionCard";
-import { ManufacturingTimeline } from "@/components/ManufacturingTimeline";
 
 export default function Analytics() {
   return (
@@ -14,9 +12,6 @@ export default function Analytics() {
           </p>
         </header>
         <AnalyticsCharts />
-        <SectionCard title="Manufacturing Status" description="Current batch progress">
-          <ManufacturingTimeline />
-        </SectionCard>
       </div>
     </DashboardLayout>
   );

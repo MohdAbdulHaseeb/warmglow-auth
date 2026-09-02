@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
-import { Trash2, Plus, Lock, Download, Share2, Check } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Trash2, Plus, Lock, Download, Share2, Check, LayoutDashboard } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { SectionCard } from "@/components/SectionCard";

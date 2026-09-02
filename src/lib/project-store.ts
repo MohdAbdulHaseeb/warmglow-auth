@@ -172,7 +172,14 @@ export function hydrateProject() {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as ProjectState;
-      state = { ...createEmptyProject(), ...parsed, bill: { ...createEmptyProject().bill, ...parsed.bill } };
+      const withCost = (a: BlueprintAnalysis | null) => (a ? { ...a, cost: a.cost ?? 0 } : null);
+      state = {
+        ...createEmptyProject(),
+        ...parsed,
+        analysis: withCost(parsed.analysis),
+        initialAnalysis: withCost(parsed.initialAnalysis),
+        bill: { ...createEmptyProject().bill, ...parsed.bill },
+      };
       emit();
     }
   } catch {

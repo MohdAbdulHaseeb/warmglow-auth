@@ -213,6 +213,6 @@ export async function generateRoomVisualization(onStage?: (stage: string) => voi
   return true;
 }
 
-export function formatCurrency(value: number) {
-  return `₹${value.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+export function formatCurrency(value: number | null | undefined) {
+  return `₹${(value ?? 0).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 }

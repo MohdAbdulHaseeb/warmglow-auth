@@ -499,9 +499,20 @@ export default function BillCreate() {
             </button>
           )}
           {locked && (
-            <p className="mt-4 flex items-center gap-2 text-sm text-success">
-              <Check size={15} aria-hidden /> Saved on {new Date(bill.confirmedAt ?? "").toLocaleString()}
-            </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="flex items-center gap-2 text-sm text-success">
+                <Check size={15} aria-hidden /> Saved on {new Date(bill.confirmedAt ?? "").toLocaleString()}
+              </p>
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate({ to: "/dashboard" })}
+                className="ember-gradient ember-glow inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-medium text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <LayoutDashboard size={15} aria-hidden /> Go to Dashboard
+              </motion.button>
+            </div>
           )}
         </SectionCard>
       </div>

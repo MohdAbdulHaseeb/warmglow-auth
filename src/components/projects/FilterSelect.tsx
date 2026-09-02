@@ -68,7 +68,7 @@ export function FilterSelect({ label, value, options, onChange, className = "" }
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="glass-panel absolute left-0 top-[calc(100%+6px)] z-50 max-h-72 w-full min-w-48 overflow-auto rounded-[18px] p-1.5 shadow-2xl"
+            className="absolute left-0 top-[calc(100%+6px)] z-50 max-h-72 w-full min-w-48 overflow-auto rounded-[18px] border border-border bg-popover p-1.5 text-popover-foreground shadow-2xl"
           >
             {options.map((o) => {
               const selected = o.value === value;

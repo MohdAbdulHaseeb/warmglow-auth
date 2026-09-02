@@ -15,6 +15,7 @@ const field =
 
 export default function BillCreate() {
   const project = useProject();
+  const navigate = useNavigate();
   const bill = project.bill;
   const [confirming, setConfirming] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);

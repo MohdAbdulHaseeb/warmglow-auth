@@ -155,7 +155,7 @@ export async function reanalyzeBlueprint(
     .filter((m) => m.material);
 
   const cost = Math.round(
-    materials.reduce((sum, m) => sum + (m.material?.price ?? 0) * 0.45, 0) || base.cost,
+    base.cost * 0.6 + materials.reduce((sum, m) => sum + (m.material?.price ?? 0) * 0.45, 0),
   );
 
   const grouped = new Map<string, number>();

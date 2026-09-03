@@ -186,7 +186,9 @@ export function useManagement() {
     setSnapshot(state);
     const listener = () => setSnapshot({ ...state });
     listeners.add(listener);
-    return () => listeners.delete(listener);
+    return () => {
+      listeners.delete(listener);
+    };
   }, []);
 
   return snapshot;

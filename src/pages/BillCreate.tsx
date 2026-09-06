@@ -21,6 +21,7 @@ const field =
 export default function BillCreate() {
   const project = useProject();
   const navigate = useNavigate();
+  useManagement();
   const bill = project.bill;
   const [confirming, setConfirming] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
@@ -93,6 +94,10 @@ export default function BillCreate() {
     }
     patchBill({
       locked: true,
+      // Snapshot current wages and material prices so later admin edits in
+      // Management never change this confirmed bill.
+      workerFees: Object.fromEntries(workerItems.map((w) => [w.id, w.fee])),
+      materialPrices: Object.fromEntries(materialItems.map((m) => [m.partId, m.price])),
       confirmedAt: new Date().toISOString(),
       id: `BILL-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 8999)}`,
     });

@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { Bell, ChevronDown, User, Settings, LogOut } from "lucide-react";
+import { Bell, ChevronDown, Settings, LogOut } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { notifications } from "@/lib/dashboard-data";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAccount } from "@/lib/account-store";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const unread = notifications.filter((n) => n.unread).length;
+  const { profile } = useAccount();
+  const initials = profile.fullName
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("");
 
   return (
     <header className="glass-panel sticky top-0 z-30 rounded-none border-x-0 border-t-0 px-4 py-3 sm:px-6">
@@ -46,9 +53,9 @@ export function Navbar() {
               className="flex items-center gap-2 rounded-2xl border border-border px-2 py-1.5 transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="ember-gradient grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold text-primary-foreground">
-                MA
+                {initials}
               </span>
-              <span className="hidden text-sm md:inline">Mohammed</span>
+              <span className="hidden text-sm md:inline">{profile.fullName.split(" ")[0]}</span>
               <ChevronDown size={14} className="text-muted-foreground" aria-hidden />
             </button>
             <AnimatePresence>
@@ -62,11 +69,8 @@ export function Navbar() {
                   className="glass-panel absolute right-0 z-40 mt-2 w-52 rounded-2xl p-2"
                 >
                   <p className="px-3 py-2 text-xs text-muted-foreground">
-                    Mohammed Abdul Haseeb
+                    {profile.fullName}
                   </p>
-                  <Link to="/settings" role="menuitem" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-white/5">
-                    <User size={15} aria-hidden /> Profile
-                  </Link>
                   <Link to="/settings" role="menuitem" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-white/5">
                     <Settings size={15} aria-hidden /> Settings
                   </Link>

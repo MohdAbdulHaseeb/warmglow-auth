@@ -26,6 +26,8 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { SectionCard } from "@/components/SectionCard";
 import { PaymentUpdateModal } from "@/components/projects/PaymentUpdateModal";
 import { hydratePayments, usePaymentOverrides } from "@/lib/payment-store";
+import { useManagement, wageTypeLabel } from "@/lib/management-store";
+import { formatCurrency } from "@/lib/project-service";
 import {
   formatINR,
   getMonitorProject,

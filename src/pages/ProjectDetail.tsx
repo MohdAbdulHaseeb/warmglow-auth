@@ -67,6 +67,7 @@ function StatCard({ label, value, sub, icon: Icon, badgeClass }: { label: string
 export default function ProjectDetail() {
   const { projectId } = useParams({ from: "/projects/$projectId" });
   const overrides = usePaymentOverrides();
+  const { workers: managedWorkers } = useManagement();
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {

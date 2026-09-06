@@ -9,8 +9,7 @@ import {
   ReceiptText,
   BarChart3,
   Bell,
-  User,
-  Settings,
+  SlidersHorizontal,
   LogOut,
   type LucideIcon,
 } from "lucide-react";
@@ -33,8 +32,7 @@ export const navItems: NavItem[] = [
   { label: "Bills & Quotations", icon: ReceiptText, to: "/dashboard" },
   { label: "Analytics", icon: BarChart3, to: "/analytics" },
   { label: "Notifications", icon: Bell, to: "/dashboard" },
-  { label: "Profile", icon: User, to: "/settings" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  { label: "Management", icon: SlidersHorizontal, to: "/management" },
 ];
 
 export const logoutItem: NavItem = { label: "Logout", icon: LogOut, to: "/" };

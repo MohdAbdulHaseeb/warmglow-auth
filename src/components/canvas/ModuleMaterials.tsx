@@ -2,17 +2,24 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Check, Loader2, Pencil, Trash2, Sparkles, Search, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import { materialCatalog, materialCategories, getMaterial, type CatalogMaterial } from "@/lib/catalog";
+import {
+  materialManagementCategories,
+  resolveMaterial,
+  stockStyles,
+  useManagement,
+  type ManagedMaterial,
+} from "@/lib/management-store";
 import { formatCurrency, generateMaterialPreview } from "@/lib/project-service";
 import { patchProject, useProject } from "@/lib/project-store";
 
 /** Module 2 — Material library, part assignment and 2D material preview. */
 export function ModuleMaterials() {
   const project = useProject();
+  const { materials: managedMaterials } = useManagement();
   const parts = project.analysis?.parts ?? [];
-  const [selected, setSelected] = useState<CatalogMaterial | null>(null);
+  const [selected, setSelected] = useState<ManagedMaterial | null>(null);
   const [pendingParts, setPendingParts] = useState<string[]>([]);
-  const [conflict, setConflict] = useState<{ partIds: string[]; material: CatalogMaterial } | null>(null);
+  const [conflict, setConflict] = useState<{ partIds: string[]; material: ManagedMaterial } | null>(null);
   const [query, setQuery] = useState("");
   const [openCategory, setOpenCategory] = useState<string | null>("Wood");
   const [generating, setGenerating] = useState(false);
@@ -20,20 +27,25 @@ export function ModuleMaterials() {
 
   const grouped = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return materialCategories.map((category) => ({
-      category,
-      items: materialCatalog.filter(
-        (m) => m.category === category && (!q || m.name.toLowerCase().includes(q) || m.type.toLowerCase().includes(q)),
-      ),
-    }));
-  }, [query]);
+    const available = managedMaterials.filter((m) => m.isActive);
+    return materialManagementCategories
+      .map((category) => ({
+        category,
+        items: available.filter(
+          (m) =>
+            m.category === category &&
+            (!q || m.name.toLowerCase().includes(q) || m.type.toLowerCase().includes(q)),
+        ),
+      }))
+      .filter((g) => g.items.length > 0);
+  }, [query, managedMaterials]);
 
   const assignedMap = useMemo(
     () => Object.fromEntries(project.assignments.map((a) => [a.partId, a])),
     [project.assignments],
   );
 
-  const commitAssignment = (material: CatalogMaterial, partIds: string[]) => {
+  const commitAssignment = (material: ManagedMaterial, partIds: string[]) => {
     const next = project.assignments.filter((a) => !partIds.includes(a.partId));
     partIds.forEach((partId) => next.push({ partId, materialId: material.id, quantity: 1 }));
     patchProject({ assignments: next, materialPreviewReady: false, suggestions: [] });
@@ -128,7 +140,7 @@ export function ModuleMaterials() {
               <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {project.assignments.map((a) => {
                   const part = parts.find((p) => p.id === a.partId);
-                  const material = getMaterial(a.materialId);
+                  const material = resolveMaterial(a.materialId);
                   return (
                     <motion.div
                       key={a.partId}
@@ -214,6 +226,11 @@ export function ModuleMaterials() {
                                 <span className="rounded-full bg-highlight/15 px-2 py-0.5 text-[11px] text-highlight">
                                   {m.quality}
                                 </span>
+                                <span
+                                  className={`rounded-full border px-2 py-0.5 text-[11px] ${stockStyles[m.stockStatus]}`}
+                                >
+                                  {m.stockStatus}
+                                </span>
                               </div>
                               <p className="mt-1 text-xs text-muted-foreground">{m.description}</p>
                               <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -222,17 +239,25 @@ export function ModuleMaterials() {
                                 </span>
                                 <button
                                   type="button"
+                                  disabled={m.stockStatus === "Out of Stock"}
                                   onClick={() => {
+                                    if (m.stockStatus === "Low Stock") {
+                                      toast.warning(`${m.name} is low on stock.`);
+                                    }
                                     setSelected(m);
                                     setPendingParts(editingPart ? [editingPart] : []);
                                   }}
-                                  className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                                  className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:border-border disabled:bg-transparent disabled:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                                     selected?.id === m.id
                                       ? "ember-gradient text-primary-foreground"
                                       : "border border-accent/40 text-accent hover:bg-accent/10"
                                   }`}
                                 >
-                                  {selected?.id === m.id ? "Selected" : "Select"}
+                                  {m.stockStatus === "Out of Stock"
+                                    ? "Unavailable"
+                                    : selected?.id === m.id
+                                      ? "Selected"
+                                      : "Select"}
                                 </button>
                               </div>
                             </div>
@@ -280,7 +305,7 @@ export function ModuleMaterials() {
                             <span className="block truncate">{part.label}</span>
                             {existing && (
                               <span className="block truncate text-[11px] text-warning">
-                                Already: {getMaterial(existing.materialId)?.name}
+                                Already: {resolveMaterial(existing.materialId)?.name}
                               </span>
                             )}
                           </span>
@@ -322,7 +347,7 @@ export function ModuleMaterials() {
               <ul className="mt-3 space-y-2">
                 {project.assignments.map((a) => {
                   const part = parts.find((p) => p.id === a.partId);
-                  const material = getMaterial(a.materialId);
+                  const material = resolveMaterial(a.materialId);
                   return (
                     <li
                       key={a.partId}

@@ -159,7 +159,9 @@ export default function ProjectDetail() {
             description={`${project.team.length} member${project.team.length === 1 ? "" : "s"} on this project`}
           >
             <ul className="space-y-3">
-              {project.team.map((w, i) => (
+              {project.team.map((w, i) => {
+                const managed = managedWorkers.find((m) => m.id === w.id);
+                return (
                 <motion.li
                   key={w.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -173,6 +175,11 @@ export default function ProjectDetail() {
                   <div className="min-w-0">
                     <p className="truncate font-medium">{w.name}</p>
                     <p className="truncate text-xs text-muted-foreground">{w.role}</p>
+                    {managed && (
+                      <p className="text-xs text-accent">
+                        {formatCurrency(managed.wage)} / {wageTypeLabel[managed.wageType]}
+                      </p>
+                    )}
                     <p className="mt-1 flex flex-wrap gap-x-3 text-xs text-muted-foreground">
                       <span className="inline-flex items-center gap-1"><Phone size={11} aria-hidden />{w.phone}</span>
                       <span className="inline-flex items-center gap-1"><Mail size={11} aria-hidden />{w.email}</span>
@@ -183,10 +190,11 @@ export default function ProjectDetail() {
                       w.active ? "border-success/30 bg-success/15 text-success" : "border-border text-muted-foreground"
                     }`}
                   >
-                    {w.active ? "Active" : "Inactive"}
+                    {managed ? managed.status : w.active ? "Active" : "Inactive"}
                   </span>
                 </motion.li>
-              ))}
+                );
+              })}
               {project.team.length === 0 && <li className="text-sm text-muted-foreground">No workers assigned yet.</li>}
             </ul>
           </SectionCard>

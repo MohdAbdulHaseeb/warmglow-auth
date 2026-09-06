@@ -8,7 +8,7 @@
  * any component.
  */
 import type { BlueprintAnalysis, BlueprintFile, DesignSuggestion, MaterialAssignment } from "./project-store";
-import { getMaterial } from "./catalog";
+import { resolveMaterial as getMaterial } from "./management-store";
 
 export const ACCEPTED_BLUEPRINT_TYPES = ["application/pdf", "image/png", "image/jpeg"];
 export const MAX_FILE_MB = 25;

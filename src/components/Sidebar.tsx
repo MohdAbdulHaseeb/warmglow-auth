@@ -79,7 +79,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 /** Mobile bottom navigation with the first five destinations. */
 export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const items = [0, 1, 2, 8, 11].map((i) => navItems[i]!);
+  const items = [0, 1, 2, 8, 10].map((i) => navItems[i]!);
 
   return (
     <nav

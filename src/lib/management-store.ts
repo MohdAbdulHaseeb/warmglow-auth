@@ -296,3 +296,31 @@ export const workerStatusStyles: Record<WorkerStatus, string> = {
   Active: "bg-success/15 text-success border-success/30",
   Inactive: "bg-muted/40 text-muted-foreground border-border",
 };
+
+/**
+ * Resolve a material by id for display — falls back to the static catalog so
+ * historical projects and confirmed bills keep showing removed materials.
+ */
+export function resolveMaterial(id: string) {
+  return state.materials.find((m) => m.id === id) ?? getManagedMaterialFallback(id);
+}
+
+function getManagedMaterialFallback(id: string) {
+  const seed = materialCatalog.find((m) => m.id === id);
+  if (!seed) return undefined;
+  const now = new Date().toISOString();
+  return {
+    ...seed,
+    description: seed.description,
+    image: null,
+    stockStatus: "Available" as StockStatus,
+    isActive: false,
+    createdAt: now,
+    updatedAt: now,
+  } satisfies ManagedMaterial;
+}
+
+/** Workers available for assignment: active ones plus any already assigned. */
+export function assignableWorkers(alreadyAssigned: string[] = []) {
+  return state.workers.filter((w) => w.status === "Active" || alreadyAssigned.includes(w.id));
+}

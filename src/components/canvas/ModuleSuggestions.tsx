@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Loader2, Sparkles, Check, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency, generateDesignSuggestions, reanalyzeBlueprint } from "@/lib/project-service";
-import { getMaterial } from "@/lib/catalog";
+import { resolveMaterial as getMaterial } from "@/lib/management-store";
 import { patchProject, useProject } from "@/lib/project-store";
 
 /** Module 3 — Optional AI design suggestion gallery. */

@@ -4,7 +4,7 @@ import { Loader2, Box, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { FileDropzone } from "@/components/canvas/FileDropzone";
 import { generateRoomVisualization } from "@/lib/project-service";
-import { getMaterial } from "@/lib/catalog";
+import { resolveMaterial as getMaterial } from "@/lib/management-store";
 import { patchProject, useProject, type RoomSide } from "@/lib/project-store";
 
 const sides: { id: RoomSide; label: string }[] = [

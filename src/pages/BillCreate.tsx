@@ -5,8 +5,13 @@ import { Trash2, Plus, Lock, Download, Share2, Check, LayoutDashboard } from "lu
 import { toast } from "sonner";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { SectionCard } from "@/components/SectionCard";
-import { getMaterial } from "@/lib/catalog";
-import { workers as workerCatalog, additionalCostPresets } from "@/lib/catalog";
+import { additionalCostPresets } from "@/lib/catalog";
+import {
+  assignableWorkers,
+  resolveMaterial as getMaterial,
+  useManagement,
+  wageTypeLabel,
+} from "@/lib/management-store";
 import { formatCurrency } from "@/lib/project-service";
 import { hydrateProject, patchBill, useProject } from "@/lib/project-store";
 
@@ -47,9 +52,18 @@ export default function BillCreate() {
     [project.assignments, project.analysis, bill.materialPrices, bill.removedMaterialParts],
   );
 
+  const workerOptions = assignableWorkers(bill.workerIds);
   const workerItems = bill.workerIds.map((id) => {
-    const w = workerCatalog.find((x) => x.id === id)!;
-    return { ...w, fee: bill.workerFees[id] ?? w.fee };
+    const w = workerOptions.find((x) => x.id === id);
+    return {
+      id,
+      name: w?.name ?? "Worker",
+      role: w?.role ?? "",
+      profile: w?.profile ?? "",
+      feeType: w ? wageTypeLabel[w.wageType] : "project",
+      /** Locked bills keep the wage snapshot taken at confirmation. */
+      fee: bill.workerFees[id] ?? w?.wage ?? 0,
+    };
   });
 
   const materialTotal = materialItems.reduce((s, m) => s + m.total, 0);
@@ -195,7 +209,7 @@ export default function BillCreate() {
 
         <SectionCard title="Worker Assignment" description="Assign the team delivering this project">
           <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {workerCatalog.map((w) => {
+            {workerOptions.map((w) => {
               const active = bill.workerIds.includes(w.id);
               return (
                 <li
@@ -206,7 +220,7 @@ export default function BillCreate() {
                   <p className="text-xs text-accent">{w.role}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{w.profile}</p>
                   <p className="mt-2 text-xs">
-                    {formatCurrency(bill.workerFees[w.id] ?? w.fee)} / {w.feeType}
+                    {formatCurrency(bill.workerFees[w.id] ?? w.wage)} / {wageTypeLabel[w.wageType]}
                   </p>
                   <button
                     type="button"

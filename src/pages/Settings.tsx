@@ -180,7 +180,8 @@ export default function Settings() {
                 label="Current Password"
                 value={passwords.current}
                 error={pwErrors["current"]}
-                onChange={(v) => {
+                onChange={(e) => {
+                  const v = e.target.value;
                   setPasswords((p) => ({ ...p, current: v }));
                   setPwErrors((e) => ({ ...e, current: undefined }));
                 }}
@@ -190,7 +191,8 @@ export default function Settings() {
                 label="New Password"
                 value={passwords.next}
                 error={pwErrors["next"]}
-                onChange={(v) => {
+                onChange={(e) => {
+                  const v = e.target.value;
                   setPasswords((p) => ({ ...p, next: v }));
                   setPwErrors((e) => ({ ...e, next: undefined }));
                 }}
@@ -200,7 +202,8 @@ export default function Settings() {
                 label="Confirm New Password"
                 value={passwords.confirm}
                 error={pwErrors["confirm"]}
-                onChange={(v) => {
+                onChange={(e) => {
+                  const v = e.target.value;
                   setPasswords((p) => ({ ...p, confirm: v }));
                   setPwErrors((e) => ({ ...e, confirm: undefined }));
                 }}

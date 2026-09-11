@@ -12,7 +12,7 @@ export function Notifications() {
           viewport={{ once: true }}
           transition={{ duration: 0.35, delay: i * 0.06 }}
           className={`rounded-2xl border p-3 transition-colors ${
-            n.unread ? "border-accent/30 bg-accent/[0.07]" : "border-border bg-white/[0.02]"
+            n.unread ? "border-accent/30 bg-selected" : "border-border bg-surface"
           }`}
         >
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">

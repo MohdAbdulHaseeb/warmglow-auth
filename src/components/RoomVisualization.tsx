@@ -6,7 +6,7 @@ function Frame({ label, tone }: { label: string; tone: string }) {
   return (
     <div className="relative overflow-hidden rounded-[18px] border border-border" style={{ background: tone }}>
       <div className="aspect-[4/3] w-full" aria-hidden />
-      <span className="absolute left-3 top-3 rounded-full bg-black/40 px-3 py-1 text-xs backdrop-blur-md">
+      <span className="absolute left-3 top-3 rounded-full bg-surface/80 px-3 py-1 text-xs backdrop-blur-md">
         {label}
       </span>
     </div>
@@ -19,11 +19,11 @@ export function RoomVisualization() {
   return (
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <Frame label="Before" tone="linear-gradient(150deg,#2a211c,#3a2c24)" />
+        <Frame label="Before" tone="var(--gradient-preview)" />
         <div className="relative">
-          <Frame label="After" tone="linear-gradient(150deg,#4a2f1f,#c96a3d)" />
+          <Frame label="After" tone="var(--gradient-canvas)" />
           {loading && (
-            <div className="absolute inset-0 grid place-items-center rounded-[18px] bg-black/50 backdrop-blur-sm">
+            <div className="absolute inset-0 grid place-items-center rounded-[18px] bg-background/75 backdrop-blur-sm">
               <Loader2 className="animate-spin text-highlight" aria-hidden />
             </div>
           )}

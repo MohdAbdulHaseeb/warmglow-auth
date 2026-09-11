@@ -38,7 +38,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               title={collapsed ? item.label : undefined}
               className={cn(
                 "group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-secondary-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                active ? "bg-accent/12 text-foreground" : "hover:bg-white/5 hover:text-foreground",
+                active ? "bg-selected text-foreground" : "hover:bg-secondary hover:text-foreground",
               )}
             >
               {active && (
@@ -66,7 +66,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           type="button"
           onClick={onToggle}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
           {!collapsed && <span>Collapse</span>}

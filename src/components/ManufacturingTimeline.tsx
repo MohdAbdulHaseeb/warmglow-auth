@@ -8,7 +8,7 @@ export function ManufacturingTimeline() {
 
   return (
     <div className="relative">
-      <div className="absolute left-4 top-0 h-full w-px bg-white/10 md:left-0 md:top-5 md:h-px md:w-full" aria-hidden />
+      <div className="absolute left-4 top-0 h-full w-px bg-border md:left-0 md:top-5 md:h-px md:w-full" aria-hidden />
       <motion.div
         className="ember-gradient absolute left-4 top-0 w-px md:left-0 md:top-5 md:h-px"
         initial={{ height: 0, width: 1 }}

@@ -245,7 +245,7 @@ export default function Settings() {
                         on ? "ember-gradient justify-end" : "justify-start bg-foreground/10"
                       }`}
                     >
-                      <motion.span layout className="size-5 rounded-full bg-white" />
+                      <motion.span layout className="size-5 rounded-full bg-surface shadow-sm" />
                     </button>
                   </li>
                 );

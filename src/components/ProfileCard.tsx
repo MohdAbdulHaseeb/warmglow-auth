@@ -8,7 +8,7 @@ function Meter({ label, value, caption }: { label: string; value: number; captio
         <span className="text-secondary-foreground">{label}</span>
         <span className="text-muted-foreground">{caption}</span>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+      <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
         <motion.div
           className="ember-gradient h-full rounded-full"
           initial={{ width: 0 }}

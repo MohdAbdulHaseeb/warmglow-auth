@@ -67,8 +67,8 @@ export function ThemeToggle() {
                   className={cn(
                     "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                     active
-                      ? "bg-accent/15 text-foreground"
-                      : "text-secondary-foreground hover:bg-foreground/5 hover:text-foreground",
+                      ? "bg-selected text-foreground"
+                      : "text-secondary-foreground hover:bg-secondary hover:text-foreground",
                   )}
                 >
                   <o.icon size={15} className={cn(active && "text-accent")} aria-hidden />

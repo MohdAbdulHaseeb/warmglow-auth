@@ -13,7 +13,7 @@ export function MaterialCards() {
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: i * 0.07 }}
           whileHover={{ y: -3 }}
-          className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 rounded-[18px] border border-border bg-white/[0.03] p-3 sm:flex sm:justify-between"
+          className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 rounded-[18px] border border-border bg-surface p-3 sm:flex sm:justify-between"
         >
           <div className="flex min-w-0 items-center gap-4">
             <span

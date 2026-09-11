@@ -34,7 +34,7 @@ export function Navbar() {
           <button
             type="button"
             aria-label={`Notifications, ${unread} unread`}
-            className="relative rounded-xl p-2 text-secondary-foreground transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="relative rounded-xl p-2 text-secondary-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Bell size={18} />
             {unread > 0 && (
@@ -50,7 +50,7 @@ export function Navbar() {
               onClick={() => setMenuOpen((v) => !v)}
               aria-expanded={menuOpen}
               aria-haspopup="menu"
-              className="flex items-center gap-2 rounded-2xl border border-border px-2 py-1.5 transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex items-center gap-2 rounded-2xl border border-border px-2 py-1.5 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="ember-gradient grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold text-primary-foreground">
                 {initials}
@@ -71,7 +71,7 @@ export function Navbar() {
                   <p className="px-3 py-2 text-xs text-muted-foreground">
                     {profile.fullName}
                   </p>
-                  <Link to="/settings" role="menuitem" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-white/5">
+                  <Link to="/settings" role="menuitem" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-secondary">
                     <Settings size={15} aria-hidden /> Settings
                   </Link>
                   <Link to="/" role="menuitem" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-destructive hover:bg-destructive/10">

@@ -121,7 +121,7 @@ export function ModuleRoom() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="relative h-72"
-              style={{ background: "linear-gradient(160deg,#2a211c,#4a2f1f 55%,#c96a3d)" }}
+              style={{ background: "var(--gradient-preview)" }}
             >
               <div className="absolute inset-0 grid place-items-center">
                 <div className="glass-panel rounded-[18px] px-5 py-4 text-center">

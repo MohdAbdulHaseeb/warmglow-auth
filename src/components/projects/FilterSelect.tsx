@@ -16,7 +16,7 @@ interface FilterSelectProps {
 }
 
 /**
- * Warm Ember styled dropdown — replaces the native <select> whose popup
+ * Theme-aware dropdown — replaces the native <select> whose popup
  * rendered with the browser's default white background.
  */
 export function FilterSelect({ label, value, options, onChange, className = "" }: FilterSelectProps) {
@@ -84,8 +84,8 @@ export function FilterSelect({ label, value, options, onChange, className = "" }
                     }}
                     className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       selected
-                        ? "bg-accent/15 text-accent"
-                        : "text-secondary-foreground hover:bg-accent/10 hover:text-foreground"
+                        ? "bg-selected text-foreground"
+                        : "text-secondary-foreground hover:bg-secondary hover:text-foreground"
                     }`}
                   >
                     <span className="truncate">{o.label}</span>

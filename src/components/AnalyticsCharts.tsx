@@ -41,7 +41,7 @@ export function AnalyticsCharts() {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
             <XAxis dataKey="month" tick={axis} tickLine={false} axisLine={false} />
             <YAxis tick={axis} tickLine={false} axisLine={false} width={28} />
-            <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
+            <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--surface-secondary)" }} />
             <Bar dataKey="projects" fill="var(--primary)" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>

@@ -15,7 +15,7 @@ function Actions() {
           key={a.label}
           type="button"
           aria-label={a.label}
-          className={`rounded-xl p-2 transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+          className={`rounded-xl p-2 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
             a.label === "Delete" ? "text-destructive/80 hover:text-destructive" : "text-secondary-foreground hover:text-accent"
           }`}
         >
@@ -37,7 +37,7 @@ function StatusPill({ status }: { status: Project["status"] }) {
 function Bar({ value }: { value: number }) {
   return (
     <div className="flex min-w-24 items-center gap-2">
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
         <motion.div
           className="ember-gradient h-full rounded-full"
           initial={{ width: 0 }}
@@ -75,7 +75,7 @@ export function ProjectTable({ projects = recentProjects }: { projects?: Project
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: i * 0.05 }}
-                className="border-t border-border transition-colors hover:bg-white/[0.03]"
+                className="border-t border-border transition-colors hover:bg-secondary/70"
               >
                 <td className="px-3 py-3 font-medium">{p.name}</td>
                 <td className="px-3 py-3 text-secondary-foreground">{p.client}</td>
@@ -92,7 +92,7 @@ export function ProjectTable({ projects = recentProjects }: { projects?: Project
       {/* Mobile cards */}
       <ul className="space-y-3 md:hidden">
         {projects.map((p) => (
-          <li key={p.id} className="rounded-2xl border border-border bg-white/[0.03] p-4">
+          <li key={p.id} className="rounded-2xl border border-border bg-surface p-4">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
               <div className="min-w-0">
                 <p className="truncate font-medium">{p.name}</p>

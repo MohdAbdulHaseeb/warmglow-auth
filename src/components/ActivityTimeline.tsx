@@ -4,7 +4,7 @@ import { activityFeed } from "@/lib/dashboard-data";
 export function ActivityTimeline() {
   return (
     <ol className="relative space-y-5 pl-5">
-      <span className="absolute left-1.5 top-1 h-[calc(100%-0.5rem)] w-px bg-white/10" aria-hidden />
+      <span className="absolute left-1.5 top-1 h-[calc(100%-0.5rem)] w-px bg-border" aria-hidden />
       {activityFeed.map((item, i) => (
         <motion.li
           key={item.id}

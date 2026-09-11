@@ -34,7 +34,7 @@ export function QuickActions() {
           transition={{ duration: 0.3, delay: i * 0.05 }}
           whileHover={{ y: -4, scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="group grid aspect-square place-items-center gap-2 rounded-[18px] border border-border bg-white/[0.03] p-3 text-center transition-colors hover:border-accent/40 hover:bg-accent/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group grid aspect-square place-items-center gap-2 rounded-[18px] border border-border bg-surface p-3 text-center transition-colors hover:border-accent/40 hover:bg-selected focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span className="grid size-11 place-items-center rounded-2xl bg-accent/12 text-accent transition-colors group-hover:bg-accent/20">
             <a.icon size={19} aria-hidden />

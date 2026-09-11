@@ -38,7 +38,7 @@ export function UploadBlueprint() {
             runAnalysis();
           }}
           className={`grid place-items-center rounded-[18px] border-2 border-dashed p-8 text-center transition-colors ${
-            dragging ? "border-accent bg-accent/10" : "border-border bg-white/[0.02]"
+            dragging ? "border-accent bg-selected" : "border-border bg-surface"
           }`}
         >
           <motion.span
@@ -59,7 +59,7 @@ export function UploadBlueprint() {
           </button>
         </div>
 
-        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-border bg-white/[0.03] p-3">
+        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-border bg-surface p-3">
           <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent">
             <FileText size={18} aria-hidden />
           </span>
@@ -76,7 +76,7 @@ export function UploadBlueprint() {
             <span className="text-secondary-foreground">AI Analysis Progress</span>
             <span className="text-accent">{progress}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="h-2 overflow-hidden rounded-full bg-secondary">
             <motion.div
               className="ember-gradient h-full rounded-full"
               animate={{ width: `${progress}%` }}
@@ -103,7 +103,7 @@ export function UploadBlueprint() {
             { label: "Detected Items", value: "18", icon: Sofa },
             { label: "Material Cost", value: "₹2.4L", icon: IndianRupee },
           ].map((m) => (
-            <div key={m.label} className="rounded-2xl border border-border bg-white/[0.03] p-3">
+            <div key={m.label} className="rounded-2xl border border-border bg-surface p-3">
               <m.icon size={16} className="text-highlight" aria-hidden />
               <p className="mt-2 text-lg font-semibold">{m.value}</p>
               <p className="text-xs text-muted-foreground">{m.label}</p>
@@ -113,7 +113,7 @@ export function UploadBlueprint() {
 
         <button
           type="button"
-          className="w-full rounded-2xl border border-border bg-white/[0.03] py-2.5 text-sm text-secondary-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="w-full rounded-2xl border border-border bg-surface py-2.5 text-sm text-secondary-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           Generate Report
         </button>
